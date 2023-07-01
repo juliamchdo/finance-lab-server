@@ -7,21 +7,21 @@ export async function appRoutes(app: FastifyInstance){
     //cria um novo lançamento
     app.post('/novo-lancamento', async (request) => {
         const createLancamento = z.object({
-            description: z.string(),
-            type: z.string(),
-            value: z.number()
+            descricao: z.string(),
+            tipo: z.string(),
+            valor: z.number()
         })
 
         //valida e converte os dados em um objeto (para POST ou PUT)
-        const {description, value, type} = createLancamento.parse(request.body);
+        const {descricao, valor, tipo} = createLancamento.parse(request.body);
 
         const today = dayjs().startOf('date').toDate();
 
         await prisma.lancamento.create({
             data:{
-                description,
-                type,
-                value,
+                descricao,
+                tipo,
+                valor,
                 date: today
             }
         }).catch(e => {
@@ -33,23 +33,23 @@ export async function appRoutes(app: FastifyInstance){
     app.post('/editar-lancamento', async (request) => {
         const editLancamento = z.object({
             id: z.string(),
-            description: z.string(),
-            type: z.string(),
-            value: z.number(),
-            date: z.coerce.string()
+            descricao: z.string(),
+            tipo: z.string(),
+            valor: z.number(),
+            // date: z.coerce.string()
         })
 
-        const {id, description, value, type, date} = editLancamento.parse(request.body);
+        const {id, descricao, valor, tipo} = editLancamento.parse(request.body);
 
         await prisma.lancamento.update({
             where:{
                 id: id
             },
             data:{
-                description,
-                type,
-                value,
-                date
+                descricao,
+                tipo,
+                valor,
+                // date
             }
        }).catch(e =>{
         console.log(e)
@@ -60,6 +60,23 @@ export async function appRoutes(app: FastifyInstance){
     app.get('/resumo', async() => {
         const movimentacao = prisma.lancamento.findMany();
         return movimentacao;
+    })
+
+    //retorna os detalhes da informação de acordo com o id
+    app.get('/lancamento/:id', async (request) => {
+        const getId = z.object({
+            id: z.string().uuid()
+        })
+
+        const {id} = getId.parse(request.params)
+
+        const lancamento = await prisma.lancamento.findUnique({
+            where:{
+                id: id
+            }
+        })
+
+        return lancamento;
     })
 
     //retorna as movimentações de acordo com um período específico
@@ -98,7 +115,7 @@ export async function appRoutes(app: FastifyInstance){
         let totalMovimentacoes: Movimentacao[];
 
         totalMovimentacoes = await prisma.$queryRaw`
-            SELECT SUM(CASE WHEN type = 'ENTRADA' THEN value ELSE -value END) as total
+            SELECT SUM(CASE WHEN tipo = 'ENTRADA' THEN valor ELSE -valor END) as total
             FROM lancamentos
         `
         const total = Number(totalMovimentacoes[0].total);
@@ -106,14 +123,12 @@ export async function appRoutes(app: FastifyInstance){
     })
     
     //deleta lançamentos
-    app.delete('/', async (request) => {
-        console.log(request.query)
+    app.delete('/delete/:id', async (request) => {
         const deleteLancamento = z.object({
             id: z.string()
         })
 
-        const { id } = deleteLancamento.parse(request.query)
-        console.log(id)
+        const { id } = deleteLancamento.parse(request.params)
 
         await prisma.lancamento.delete({
             where:{

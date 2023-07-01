@@ -15,9 +15,9 @@ datasource db {
 model Lancamento{
   //defino a coluna como uuid automático
   id String @id @default(uuid())
-  description String
-  type String
-  value Decimal
+  descricao String
+  tipo String
+  valor Decimal
   date DateTime
 
 //crio um 'apelido' para a tabela, que é o que vai ser usado

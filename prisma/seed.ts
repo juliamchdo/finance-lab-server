@@ -8,9 +8,9 @@ async function main() {
     await prisma.lancamento.create({
         data:{
             id: 'e125cd50-06e4-11ee-be56-0242ac120002',
-            description: 'Mercado',
-            type: 'SAIDA',
-            value: 50,
+            descricao: 'Mercado',
+            tipo: 'SAIDA',
+            valor: 50,
             date: new Date('2023-05-06T00:00:00.000z')
         },
     }),
@@ -18,9 +18,9 @@ async function main() {
     await prisma.lancamento.create({
       data:{
           id: '405c40fa-06e6-11ee-be56-0242ac120002',
-          description: 'Freela',
-          type: 'ENTRADA',
-          value: 180,
+          descricao: 'Freela',
+          tipo: 'ENTRADA',
+          valor: 180,
           date: new Date('2023-06-06T00:00:00.000z')
       },
   })
