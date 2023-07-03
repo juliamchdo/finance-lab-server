@@ -11,7 +11,6 @@ datasource db {
 }
 
 //-----------------criação das tabelas utilizadas----------------------//
-
 model Lancamento{
   //defino a coluna como uuid automático
   id String @id @default(uuid())
