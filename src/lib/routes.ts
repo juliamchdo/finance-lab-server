@@ -35,8 +35,7 @@ export async function appRoutes(app: FastifyInstance){
             id: z.string(),
             descricao: z.string(),
             tipo: z.string(),
-            valor: z.number(),
-            // date: z.coerce.string()
+            valor: z.number()
         })
 
         const {id, descricao, valor, tipo} = editLancamento.parse(request.body);
@@ -45,11 +44,10 @@ export async function appRoutes(app: FastifyInstance){
             where:{
                 id: id
             },
-            data:{
+            data:{      
                 descricao,
                 tipo,
-                valor,
-                // date
+                valor
             }
        }).catch(e =>{
         console.log(e)
