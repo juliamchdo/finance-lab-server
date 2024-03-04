@@ -16,3 +16,6 @@
 <pre>
   <code>npm run dev</code>
 </pre>
+
+<h3>Observação</h3>
+<p>Para uma melhor execução do projeto, execute o https://github.com/juliamchdo/finance-lab-mobile em paralelo (front end)</p>
